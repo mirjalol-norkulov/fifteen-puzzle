@@ -4,6 +4,8 @@ $primary-color: #e27d5f;
 $secondary-color: #e8a87c;
 $accent-color: #40b3a2;
 
+@import "typography";
+
 *,
 *::before,
 *::after {
@@ -31,6 +33,24 @@ body {
   align-items: center;
   min-height: 100vh;
   width: 35%;
+}
+
+@media all and (min-width: 981px) {
+  .main {
+    width: 50%;
+  }
+}
+
+@media all and (max-width: 980px) {
+  .main {
+    width: 60%;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .main {
+    width: 80%;
+  }
 }
 
 .board-wrapper {
