@@ -10,6 +10,11 @@ export default class Board {
     this.rootElement = document.createElement("div");
     this.rootElement.classList.add("board");
     this.cells = Array(Math.sqrt(this.size));
+    this._seconds = 0;
+    this.timer = null;
+    this._movesCount = 0;
+    this.onMovesCountChange = null;
+    this.onSecondsChange = null;
 
     this.renderBg();
     this.render();
@@ -20,6 +25,30 @@ export default class Board {
     this.rootElement.appendChild(this.winScreen);
 
     this.rootElement.addEventListener("click", this.handleClick.bind(this));
+  }
+
+  get movesCount() {
+    return this._movesCount;
+  }
+
+  set movesCount(value) {
+    this._movesCount = value;
+    if (
+      this.onMovesCountChange &&
+      this.onMovesCountChange instanceof Function
+    ) {
+      this.onMovesCountChange();
+    }
+  }
+
+  get seconds() {
+    return this._seconds;
+  }
+  set seconds(value) {
+    this._seconds = value;
+    if (this.onSecondsChange && this.onSecondsChange instanceof Function) {
+      this.onSecondsChange();
+    }
   }
 
   renderBg() {
@@ -61,6 +90,21 @@ export default class Board {
     this.hideWinScreen();
     this.clear();
     this.render();
+    this.movesCount = 0;
+    this.stopTimer();
+    this.seconds = 0;
+  }
+
+  stopTimer() {
+    clearInterval(this.timer);
+  }
+
+  startTimer() {
+    if (!this.timer) {
+      this.timer = setInterval(() => {
+        this.seconds++;
+      }, 1000);
+    }
   }
 
   showWinScreen() {
@@ -80,6 +124,8 @@ export default class Board {
     if (number === 0) {
       return;
     }
+
+    this.startTimer();
 
     const [row, col] = utils.findIndexes(this.numbersGrid, number);
     const clickedCell = this.cells[row][col];
@@ -103,7 +149,7 @@ export default class Board {
     this.cells[emptyRow][emptyCol] = temp;
 
     clickedCell.move(direction, [emptyRow, emptyCol]);
-
+    this.movesCount++;
     if (utils.hasWon(this.numbersGrid)) {
       this.showWinScreen();
     }

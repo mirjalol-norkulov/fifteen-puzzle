@@ -13,8 +13,17 @@
   <body>
     <main class="main" id="app">
       <div class="header">
-        <div class="moves-count"></div>
-        <button class="restart" id="restart-btn">Restart</button>
+        <div class="stats">
+          <div>
+            Moves
+            <span class="moves-count">0</span>
+          </div>
+          <div>
+            Time
+            <span class="time" id="time">0s</span>
+          </div>
+        </div>
+        <button class="btn" id="restart-btn">Restart</button>
       </div>
       <div class="board-wrapper" id="board-wrapper"></div>
       <audio src="/static/audio/bg.mp3" autoplay></audio>
