@@ -128,6 +128,7 @@ export default class Board {
     this.startTimer();
 
     const [row, col] = utils.findIndexes(this.numbersGrid, number);
+
     const clickedCell = this.cells[row][col];
 
     const [emptyRow, emptyCol, direction] = utils.findEmptyNeighbour(
@@ -135,6 +136,8 @@ export default class Board {
       row,
       col
     );
+
+    console.log(emptyRow, emptyCol, direction);
 
     if (emptyRow === null || emptyCol === null || !direction) {
       return;
