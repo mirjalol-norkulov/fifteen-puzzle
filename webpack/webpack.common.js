@@ -3,9 +3,17 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: { index: "./src/index.js", v2: "./src/v2.js" },
   module: {
     rules: [
+      {
+        test: /\.(png|jpe?g|gif|mp3)$/i,
+        use: [
+          {
+            loader: "file-loader",
+          },
+        ],
+      },
       {
         test: /\.s[ac]ss$/i,
         use: [
@@ -27,6 +35,12 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      chunks: ["index"],
+    }),
+    new HtmlWebpackPlugin({
+      filename: "v2.html",
+      template: "./src/v2.html",
+      chunks: ["v2"],
     }),
     new PrettierPlugin(),
   ],
