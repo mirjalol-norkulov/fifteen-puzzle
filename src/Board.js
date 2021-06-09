@@ -1,3 +1,5 @@
+import Hammer from "hammerjs";
+
 import utils from "./utils";
 import constants from "./constants";
 import Cell from "./Cell";
@@ -24,7 +26,11 @@ export default class Board {
     this.winScreen.classList.add("board__win");
     this.rootElement.appendChild(this.winScreen);
 
-    this.rootElement.addEventListener("click", this.handleClick.bind(this));
+    // this.rootElement.addEventListener("click", this.handleClick.bind(this));
+    const hammer = new Hammer(this.rootElement);
+    hammer.get("swipe").set({ direction: Hammer.DIRECTION_ALL });
+    hammer.on("tap", this.handleClick.bind(this));
+    hammer.on("swipe", this.handleClick.bind(this));
   }
 
   get movesCount() {
@@ -96,14 +102,17 @@ export default class Board {
   }
 
   stopTimer() {
-    clearInterval(this.timer);
+    clearTimeout(this.timer);
   }
 
   startTimer() {
+    const incrementSeconds = () => {
+      this.seconds++;
+      this.timer = setTimeout(incrementSeconds, 1000);
+    };
+
     if (!this.timer) {
-      this.timer = setInterval(() => {
-        this.seconds++;
-      }, 1000);
+      this.timer = setTimeout(incrementSeconds, 1000);
     }
   }
 
@@ -155,6 +164,7 @@ export default class Board {
     this.movesCount++;
     if (utils.hasWon(this.numbersGrid)) {
       this.showWinScreen();
+      this.stopTimer();
     }
   }
 }
